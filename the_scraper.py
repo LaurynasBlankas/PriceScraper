@@ -1,8 +1,9 @@
 import os
 from bs4 import BeautifulSoup
 from curl_cffi import requests
+from dotenv import load_dotenv
 
-
+load_dotenv()
 url = "https://www.kaina24.lt/p/nukalkinimo-skystis-delonghi-ecodecalk-dlsc500-500-ml/"
 page = requests.get(url, impersonate="chrome110")
 
