@@ -15,7 +15,7 @@ jobs:
           
       - name: Install & Run
         run: |
-          pip install curl_cffi beautifulsoup4
+          pip install curl_cffi beautifulsoup4 python-dotenv
           python the_scraper.py
 
       - name: Run scraper
