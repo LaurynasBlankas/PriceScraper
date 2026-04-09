@@ -20,6 +20,6 @@ jobs:
 
       - name: Run scraper
         env:
-          BOT_TOKEN: ${{ secrets.api_key }}
-          CHAT_ID: ${{ secrets.receiver_id }}
+          api_key: ${{ secrets.api_key }}
+          receiver_id: ${{ secrets.receiver_id }}
         run: python the_scraper.py
