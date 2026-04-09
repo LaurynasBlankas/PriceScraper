@@ -5,8 +5,8 @@ from curl_cffi import requests
 url = "https://www.kaina24.lt/p/nukalkinimo-skystis-delonghi-ecodecalk-dlsc500-500-ml/"
 page = requests.get(url, impersonate="chrome110")
 
-api_key = "8712584120:AAGPZJvpnTO4cBNfs6Oyn7cS88QzOTy2oC8"
-receiver_id = "793355704"
+api_key = os.getenv("api_key")
+receiver_id = os.getenv("receiver_id")
 
 def send_telegram(message):
     url_telegram = f"https://api.telegram.org/bot{api_key}/sendMessage"
