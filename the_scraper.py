@@ -21,7 +21,9 @@ if low_price < 8.83:
     msg = f"Price dropped!, price is - {low_price} EUR"
     send_telegram(msg)
 
-# elif low_price == 8.83:
-#     print(f"Price didn't change, still {low_price} EUR")
+elif low_price == 8.83:
+    print(f"Price didn't change, still {low_price} EUR")
+    msg = f"Test"
+    send_telegram(msg)
 # else:
 #     print("Price has gone up")
