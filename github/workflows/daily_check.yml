@@ -11,9 +11,15 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.14'
           
       - name: Install & Run
         run: |
           pip install curl_cffi beautifulsoup4
-          python your_script_name.py
+          python the_scraper.py
+
+      - name: Run scraper
+        env:
+          BOT_TOKEN: ${{ secrets.api_key }}
+          CHAT_ID: ${{ secrets.receiver_id }}
+        run: python the_scraper.py
