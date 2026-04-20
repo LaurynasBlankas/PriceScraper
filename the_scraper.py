@@ -16,15 +16,25 @@ def send_telegram(message):
     requests.post(url_telegram, json=payload)
 
 soup = BeautifulSoup(page.text, "html.parser")
-low_price = float(soup.find("span", itemprop="lowPrice").text)
+new_price = float(soup.find("span", itemprop="lowPrice").text)
 
-if low_price < 8.83:
-    msg = f"Price dropped!, price is - {low_price} EUR"
+try:
+    with open("price.txt", "r") as file:
+        old_price = float(file.read())
+except FileNotFoundError:
+    old_price = new_price
+
+if old_price != new_price:
+    with open("price.txt", "w") as file:
+        file.write(str(new_price))
+
+if new_price < old_price:
+    msg = f"Price dropped!, was - {old_price} EUR, now - {new_price} EUR"
     send_telegram(msg)
 
-elif low_price == 8.83:
-    print(f"Price didn't change, still {low_price} EUR")
-    msg = f"Test"
+elif new_price == old_price:
+    msg = f"Price is the same - {new_price} EUR"
     send_telegram(msg)
-# else:
-#     print("Price has gone up")
+else:
+    msg = f"Price gone up, was - {old_price} EUR, now - {new_price} EUR"
+    send_telegram(msg)
