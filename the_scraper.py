@@ -24,10 +24,6 @@ try:
 except FileNotFoundError:
     old_price = new_price
 
-if old_price != new_price:
-    with open("price.txt", "w") as file:
-        file.write(str(new_price))
-
 if new_price < old_price:
     msg = f"Price dropped!, was - {old_price} EUR, now - {new_price} EUR"
     send_telegram(msg)
@@ -38,3 +34,7 @@ elif new_price == old_price:
 else:
     msg = f"Price gone up, was - {old_price} EUR, now - {new_price} EUR"
     send_telegram(msg)
+
+if old_price != new_price:
+    with open("price.txt", "w") as file:
+        file.write(str(new_price))
