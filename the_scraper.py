@@ -16,11 +16,11 @@ def send_telegram(message):
     requests.post(url_telegram, json=payload)
 
 soup = BeautifulSoup(page.text, "html.parser")
-new_price = float(soup.find("span", itemprop="lowPrice").text)
+new_price = round(float(soup.find("span", itemprop="lowPrice").text), 2)
 
 try:
     with open("price.txt", "r") as file:
-        old_price = float(file.read())
+        old_price = round(float(file.read()), 2)
 except FileNotFoundError:
     old_price = new_price
 
