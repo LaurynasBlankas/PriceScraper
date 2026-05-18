@@ -28,10 +28,11 @@ if new_price < old_price:
     msg = f"Price dropped!, was - {old_price} EUR, now - {new_price} EUR"
     send_telegram(msg)
 
-elif new_price == old_price:
-    msg = f"Price is the same - {new_price} EUR"
-    send_telegram(msg)
-else:
+# elif new_price == old_price:
+#     msg = f"Price is the same - {new_price} EUR"
+#     send_telegram(msg)
+
+if new_price > old_price:
     msg = f"Price gone up, was - {old_price} EUR, now - {new_price} EUR"
     send_telegram(msg)
 
