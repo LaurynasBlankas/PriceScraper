@@ -1,7 +1,7 @@
 name: Price Check
 on:
   schedule:
-    - cron: '0 8 * * *' # Set this to your preferred UTC time
+    - cron: '0 8 * * *'
   workflow_dispatch:
 
 jobs:
@@ -9,17 +9,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.14'
-          
-      - name: Install & Run
-        run: |
-          pip install curl_cffi beautifulsoup4 python-dotenv
-          python the_scraper.py
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install curl_cffi beautifulsoup4 python-dotenv
 
       - name: Run scraper
         env:
           api_key: ${{ secrets.api_key }}
           receiver_id: ${{ secrets.receiver_id }}
         run: python the_scraper.py
+
+      - name: Save price.txt back to repo
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add price.txt
+          git diff --staged --quiet || git commit -m "update price.txt"
+          git push
