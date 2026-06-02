@@ -2,9 +2,10 @@ import os
 from bs4 import BeautifulSoup
 from curl_cffi import requests
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
-url = "https://www.kaina24.lt/p/nukalkinimo-skystis-delonghi-ecodecalk-dlsc500-500-ml/"
+url = "https://www.senukai.lt/p/akustine-dailylente-marbet-270-cm-x-30-cm-x-1-8-cm/r1jj"
 page = requests.get(url, impersonate="chrome110")
 
 api_key = os.getenv("api_key")
@@ -16,7 +17,20 @@ def send_telegram(message):
     requests.post(url_telegram, json=payload)
 
 soup = BeautifulSoup(page.text, "html.parser")
-new_price = round(float(soup.find("span", itemprop="lowPrice").text), 2)
+
+def get_price(soup):
+    for script in soup.find_all("script", type="application/ld+json"):
+        try:
+            data = json.loads(script.string)
+            items = data if isinstance(data, list) else [data]
+            for item in items:
+                if item.get("@type") == "Product":
+                    return item["offers"]["price"]
+        except (json.JSONDecodeError, KeyError):
+            continue
+    return None
+
+new_price = get_price(soup)
 
 try:
     with open("price.txt", "r") as file:
