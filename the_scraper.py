@@ -2,10 +2,9 @@ import os
 from bs4 import BeautifulSoup
 from curl_cffi import requests
 from dotenv import load_dotenv
-import json
 
 load_dotenv()
-url = "https://www.senukai.lt/p/akustine-dailylente-marbet-270-cm-x-30-cm-x-1-8-cm/r1jj"
+url = "https://www.kaina24.lt/p/nukalkinimo-skystis-delonghi-ecodecalk-dlsc500-500-ml/"
 page = requests.get(url, impersonate="chrome110")
 
 api_key = os.getenv("api_key")
@@ -17,20 +16,7 @@ def send_telegram(message):
     requests.post(url_telegram, json=payload)
 
 soup = BeautifulSoup(page.text, "html.parser")
-
-def get_price(soup):
-    for script in soup.find_all("script", type="application/ld+json"):
-        try:
-            data = json.loads(script.string)
-            items = data if isinstance(data, list) else [data]
-            for item in items:
-                if item.get("@type") == "Product":
-                    return item["offers"]["price"]
-        except (json.JSONDecodeError, KeyError):
-            continue
-    return None
-
-new_price = get_price(soup)
+new_price = round(float(soup.find("span", itemprop="lowPrice").text), 2)
 
 try:
     with open("price.txt", "r") as file:
@@ -44,7 +30,7 @@ if new_price < old_price:
 
 # elif new_price == old_price:
 #     msg = f"Price is the same - {new_price} EUR"
-#     send_telegram(msg)
+#     send_telegram(msg)h
 
 if new_price > old_price:
     msg = f"Price gone up, was - {old_price} EUR, now - {new_price} EUR"
